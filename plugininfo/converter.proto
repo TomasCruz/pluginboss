@@ -1,0 +1,15 @@
+syntax = "proto3";
+package proto;
+option go_package = ".;plugininfo";
+
+message ConvertRequest {
+    double in = 1;
+}
+
+message ConvertResponse {
+    double out = 1;
+}
+
+service Converter {
+    rpc Convert(ConvertRequest) returns (ConvertResponse);
+}
