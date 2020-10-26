@@ -108,7 +108,7 @@ func newCataloguedClient(pluginName string, pluginCatalogue pi.PluginInfo) *plug
 
 	return plugin.NewClient(&plugin.ClientConfig{
 		HandshakeConfig:  plInfo.Handshake,
-		Plugins:          pluginCatalogue.PluginMap,
+		Plugins:          map[string]plugin.Plugin{pluginName: plInfo.Plugin},
 		Cmd:              exec.Command("sh", "-c", plInfo.Cmd),
 		AllowedProtocols: []plugin.Protocol{plugin.ProtocolGRPC},
 	})
@@ -116,8 +116,7 @@ func newCataloguedClient(pluginName string, pluginCatalogue pi.PluginInfo) *plug
 
 func loadRegisteredPlugins() pi.PluginInfo {
 	catalogue := pi.PluginInfo{
-		// initialize maps
-		PluginMap:     map[string]plugin.Plugin{},
+		// initialize
 		PluginDataMap: map[string]pi.PluginData{},
 	}
 
@@ -133,7 +132,6 @@ func loadRegisteredPlugins() pi.PluginInfo {
 func insertPlugin(pc *pi.PluginInfo, name, cmd string,
 	protocolVersion uint, magicKey, magicValue string) {
 
-	pc.PluginMap[name] = &pi.ConverterGRPCPlugin{}
 	pc.PluginDataMap[name] = pi.PluginData{
 		Cmd: cmd,
 		Handshake: plugin.HandshakeConfig{
@@ -141,6 +139,7 @@ func insertPlugin(pc *pi.PluginInfo, name, cmd string,
 			MagicCookieKey:   magicKey,
 			MagicCookieValue: magicValue,
 		},
+		Plugin: &pi.ConverterGRPCPlugin{},
 	}
 }
 

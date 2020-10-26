@@ -7,9 +7,9 @@ import (
 type PluginData struct {
 	Cmd       string
 	Handshake plugin.HandshakeConfig
+	Plugin    plugin.Plugin
 }
 
 type PluginInfo struct {
-	PluginMap     map[string]plugin.Plugin
 	PluginDataMap map[string]PluginData
 }
